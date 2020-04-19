@@ -52,11 +52,20 @@ const Login = {
 	},
 	mounted: function(){
 		console.log("LoginComponente mounted");
+		this.mostrarModal(false);
 		if(localStorage.getItem('apiToken')){
 			this.irA('ruta-ingresar-producto');
 		}
 	},
 	methods:{
+		mostrarModal(valor){
+			this.$emit('mostrar-modal',valor);
+		},
+		irA(nombreRuta){
+			if(nombreRuta != this.$route.name){
+				this.$router.push({name: nombreRuta});
+			}
+		},
 		iniciarSesion(){
 			let mensaje = "";
 			this.validaciones.usuario = true;
@@ -74,7 +83,7 @@ const Login = {
 				this.errorMensaje = mensaje;
 			}
 			else{
-				this.$emit('mostrar-modal',true);
+				this.mostrarModal(true);
 				this.errorMensaje = "";
 				axios.post(urlAPI + "/usuario/iniciarSesion",{
 					usuario: this.usuario_correo,
@@ -82,7 +91,7 @@ const Login = {
 				})
 				.then(respuesta => {
 					let datosRespuesta = respuesta.data;
-					this.$emit('mostrar-modal',false);
+					this.mostrarModal(false);
 					if(typeof datosRespuesta.api_token != "undefined" && datosRespuesta.api_token != ""){
 						localStorage.setItem("usuarioId",datosRespuesta.usuario_id);
 						localStorage.setItem("usuarioCorreo",datosRespuesta.usuario_correo);
@@ -105,7 +114,7 @@ const Login = {
 					else{
 						this.errorMensaje = "No se puede establecer conexión con el API.";
 					}
-					this.$emit('mostrar-modal',false);
+					this.mostrarModal(false);
 					console.log(e);
 				});
 			}

@@ -95,20 +95,23 @@ Vue.component('plantilla-principal',{
 		return {}
 	},
 	methods:{
+		mostrarModal(valor){
+			this.$emit('mostrar-modal',valor);
+		},
 		irA(nombreRuta){
 			if(nombreRuta != this.$route.name){
 				this.$router.push({name: nombreRuta});
 			}
 		},
 		cerrarSesion(){
-			this.$emit("mostrar-modal",true);
+			this.mostrarModal(true);
 			axios.post(urlAPI + "/usuario/cerrarSesion",{
 				usuarioId: localStorage.getItem('usuarioId'),
 				api_Token: localStorage.getItem('apiToken')
 			})
 			.then(respuesta => {
 				let datosRespuesta = respuesta.data;
-				this.$emit('mostrar-modal',false);
+				this.mostrarModal(false);
 				localStorage.clear();
 				this.irA('ruta-raiz');
 			})
@@ -123,11 +126,10 @@ Vue.component('plantilla-principal',{
 				else{
 					errorMensaje = "No se puede establecer conexión con el API.";
 				}
-				this.$emit('mostrar-modal',false);
+				this.mostrarModal(false);
 				console.log(e);
 				localStorage.clear();
 				this.irA('ruta-raiz');
-				this.$emit("mostrar-modal",false);
 			});
 		}
 	}
