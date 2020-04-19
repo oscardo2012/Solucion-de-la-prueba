@@ -45,7 +45,7 @@ Vue.component('plantilla-principal',{
 							</a>
 							<ul class="nav nav-second-level">
 								<li :class="nivel2VerCatalogo"><a  v-on:click="irA('ruta-ver-catalogo')">Ver Catálogo</a></li>
-								<li :class="nivel2DescargarCatalogo"><a >Descargar Catálogo</a></li>
+								<li :class="nivel2DescargarCatalogo"><a v-on:click="descargarCatalogo()">Descargar Catálogo</a></li>
 							</ul>
 						</li>
 
@@ -102,6 +102,9 @@ Vue.component('plantilla-principal',{
 			if(nombreRuta != this.$route.name){
 				this.$router.push({name: nombreRuta});
 			}
+		},
+		descargarCatalogo(){
+			window.open(urlWEB + "/catalogo/descargar","_blank");
 		},
 		cerrarSesion(){
 			this.mostrarModal(true);

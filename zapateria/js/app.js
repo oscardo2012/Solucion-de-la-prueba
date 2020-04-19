@@ -1,4 +1,5 @@
-const urlAPI = "http://localhost:8000/api";
+const urlAPI = "http://localhost:8000/api",
+	  urlWEB = "http://localhost:8000";
 const router = new VueRouter({
 	base: "rutas",
 	routes:[

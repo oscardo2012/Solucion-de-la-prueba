@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Image;
+use Maatwebsite\Excel\Facades\Excel;
+use Carbon\Carbon;
 
 use App\Helpers\Utilitarias;
 use App\Producto;
+use App\Exports\ProductosExport;
 
 class CatalogoController extends Controller
 {
@@ -46,5 +49,14 @@ class CatalogoController extends Controller
 				
 		Utilitarias::escribirLog('Fin intento de búsqueda de producto por referencia');
 		return response()->json($jsonRespuesta, $codigoRespuesta);
+	}
+
+	public function descargarCatalogo(Request $req){
+		/*
+		 * Genera el excel del catalogo para ser descargado.
+		 */
+		$complementoNombre = Carbon::now()->format("Y-m-d-H:i:s");
+		return Excel::download(New ProductosExport, 'catalogo-' . $complementoNombre . '.xlsx');
+
 	}
 }

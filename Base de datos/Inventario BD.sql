@@ -59,7 +59,7 @@ CREATE TABLE `productos` (
   `producto_estado` varchar(1) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`producto_id`),
   UNIQUE KEY `productos_producto_referencia_unique` (`producto_referencia`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,7 +68,7 @@ CREATE TABLE `productos` (
 
 LOCK TABLES `productos` WRITE;
 /*!40000 ALTER TABLE `productos` DISABLE KEYS */;
-INSERT INTO `productos` VALUES (1,'A1','Zapatos con ruedas','Zapatos con ruedas para niño','30','productos/A1/A1.jpeg','A'),(2,'a2','Zapatos negros','Zapatos negros hombre','20','productos/a2/a2.jpeg','I'),(3,'a3','Zapatos mujer','Zapatos negros para mujer','50','productos/a3/a3.jpeg','A');
+INSERT INTO `productos` VALUES (1,'A1','Zapatos con ruedas','Zapatos con ruedas para niño','30','productos/A1/A1.jpeg','A'),(2,'a2','Zapatos negros','Zapatos negros hombre','20','productos/a2/a2.jpeg','I'),(3,'a3','Zapatos mujer','Zapatos negros para mujer','50','productos/a3/a3.jpeg','A'),(4,'B1','Chancletas hombre','Chancletas para hombre','12','productos/B1/B1.jpeg','A'),(5,'B2','Chancletas mujer','Chancletas para mujer','14','productos/B2/B2.jpeg','A');
 /*!40000 ALTER TABLE `productos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -116,4 +116,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-18 20:55:47
+-- Dump completed on 2020-04-19  0:26:20
