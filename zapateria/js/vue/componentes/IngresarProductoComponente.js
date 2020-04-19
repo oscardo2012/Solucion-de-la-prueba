@@ -125,7 +125,7 @@ const IngresarProducto = {
 	mounted: function(){
 		console.info("IngresarProductoComponente montado")
 		if(!localStorage.getItem('apiToken')){
-			this.$router.push({name:'ruta-raiz'});
+			this.irA('ruta-raiz');
 		}
 	},
 	methods: {

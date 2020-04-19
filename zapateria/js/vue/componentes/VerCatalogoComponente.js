@@ -18,13 +18,14 @@ const VerCatalogo = {
 												<input
 													type="text" placeholder="Buscar en el catálogo"
 													class="form-control"
-													v-on:keypress="buscarEnCatalogo($event)">
+													v-model="cadenaBuscar"
+													v-on:keyup="buscarEnCatalogo($event)">
 											</div>
 										</form>
 									</div>
 									<div class="wrapper wrapper-content animated fadeInRight">
 										<div class="row">
-											<div class="col-lg-4" v-for="producto in catalogo">
+											<div class="col-lg-4" v-for="producto of catalogo" v-show="mostrarElemento(producto)">
 												<div class="contact-box">
 													<a v-on:click="verProducto(producto.producto_referencia)">
 														<div class="col-sm-4">
@@ -32,7 +33,7 @@ const VerCatalogo = {
 																<img
 																	alt="image"
 																	class="img-circle m-t-xs img-responsive"
-																	:src="urlImagenes + '/' + producto.producto_referencia">
+																	:src="urlImagen(producto)">
 																<div class="m-t-xs font-bold">
 																	{{producto.producto_nombre}}
 																</div>
@@ -129,6 +130,7 @@ const VerCatalogo = {
 		return{
 			usuario_nombre: localStorage.getItem('usuarioNombre'),
 			urlImagenes: '',
+			cadenaBuscar: '',
 			productoDetalles:{},
 			catalogo:{}
 		}
@@ -137,7 +139,7 @@ const VerCatalogo = {
 		console.log("VerCatalogoComponente mounted");
 
 		if(!localStorage.getItem('apiToken')){
-			this.$router.push({name:'ruta-raiz'});
+			this.irA('ruta-raiz');
 		}
 		else{
 			//Buscar los productos y mostrarlos
@@ -149,8 +151,14 @@ const VerCatalogo = {
 				let datosRespuesta = respuesta.data;
 				this.mostrarModal(false);
 				if(typeof datosRespuesta['exito-mensaje'] != "undefined" && datosRespuesta['exito-mensaje'] != ""){
-					this.catalogo = datosRespuesta.productos;
+					let tmpCatalogo = datosRespuesta.productos;
 					this.urlImagenes = datosRespuesta.urlBaseImagenes;
+					for(let indice in tmpCatalogo){
+						let tmp = tmpCatalogo[indice];
+						tmp.mostrar = true;
+						tmpCatalogo[indice] = tmp;
+					}
+					this.catalogo = JSON.parse(JSON.stringify(tmpCatalogo));
 				}
 				else{
 					this.catalogo = "";
@@ -159,7 +167,7 @@ const VerCatalogo = {
 			})
 			.catch(e => {
 				if(e.message != 'Network Error'){
-					
+					alert("Se ha producido un error, intente nuevamente.");	
 				}
 				else{
 					alert("No se puede establecer conexión con el API.");
@@ -173,8 +181,25 @@ const VerCatalogo = {
 		mostrarModal(valor){
 			this.$emit('mostrar-modal',valor);
 		},
+		mostrarElemento(elemento){
+			return elemento.mostrar == true;
+		},
+		urlImagen(elemento){
+			return this.urlImagenes + '/' + elemento.producto_referencia;
+		},
 		buscarEnCatalogo(evento){
-			console.log(evento.target.value);
+			let valorBuscar = this.cadenaBuscar.toUpperCase();
+			for(let indice in this.catalogo){
+				if(
+					this.catalogo[indice].producto_nombre.toUpperCase().indexOf(valorBuscar) != -1 
+					|| this.catalogo[indice].producto_referencia.toUpperCase().indexOf(valorBuscar) != -1
+				){
+					this.catalogo[indice].mostrar = true;
+				}
+				else{
+					this.catalogo[indice].mostrar = false;
+				}
+			}
 		},
 		verProducto(referencia){
 			for(producto of this.catalogo){
@@ -204,7 +229,7 @@ const VerCatalogo = {
 				descripcion: this.productoDetalles.producto_descripcion,
 				cantidad: this.productoDetalles.producto_cantidad,
 				estado: this.productoDetalles.producto_estado,
-				imagenBase64: this.productoDetalles.imagenBase64,
+				imagenBase64: 'NO',
 				api_token: localStorage.getItem("apiToken")
 			})
 			.then(respuesta => {
@@ -212,8 +237,15 @@ const VerCatalogo = {
 				this.$emit('mostrar-modal',false);
 				if(typeof datosRespuesta["exito-mensaje"] != "undefined" && datosRespuesta["exito-mensaje"] != ""){
 					//Producto encontrado
-					this.catalogo = datosRespuesta.catalogo;
+					let tmpCatalogo = datosRespuesta.catalogo;
+					for(let indice in tmpCatalogo){
+						let tmp = tmpCatalogo[indice];
+						tmp.mostrar = true;
+						tmpCatalogo[indice] = tmp;
+					}
+					this.catalogo = JSON.parse(JSON.stringify(tmpCatalogo));
 					this.productoDetalles = {};
+					this.cadenaBuscar = "";
 					$("#modalDatosproducto").modal("hide");
 					alert(datosRespuesta["exito-mensaje"]);
 				}

@@ -53,7 +53,7 @@ const Login = {
 	mounted: function(){
 		console.log("LoginComponente mounted");
 		if(localStorage.getItem('apiToken')){
-			this.$router.push({name:'ruta-ingresar-producto'});
+			this.irA('ruta-ingresar-producto');
 		}
 	},
 	methods:{
@@ -88,7 +88,7 @@ const Login = {
 						localStorage.setItem("usuarioCorreo",datosRespuesta.usuario_correo);
 						localStorage.setItem("usuarioNombre",datosRespuesta.usuario_nombre);
 						localStorage.setItem("apiToken",datosRespuesta.api_token);
-						this.$router.push({name:'ruta-ingresar-producto'});
+						this.irA('ruta-ingresar-producto');
 					}
 					else{
 						localStorage.clear();

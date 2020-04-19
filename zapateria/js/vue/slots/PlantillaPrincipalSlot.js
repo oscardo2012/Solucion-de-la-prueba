@@ -25,7 +25,7 @@ Vue.component('plantilla-principal',{
 						</li>
 
 						<li :class="nivel1Productos">
-							<a href="#">
+							<a>
 								<i class="fa fa-shopping-basket"></i>
 								<span class="nav-label">Productos</span>
 								<span class="fa arrow"></span>
@@ -38,7 +38,7 @@ Vue.component('plantilla-principal',{
 						</li>
 
 						<li :class="nivel1Catalogo">
-							<a href="#">
+							<a>
 								<i class="fa fa-book"></i>
 								<span class="nav-label">Catálogo de Productos</span>
 								<span class="fa arrow"></span>
@@ -96,19 +96,21 @@ Vue.component('plantilla-principal',{
 	},
 	methods:{
 		irA(nombreRuta){
-			this.$router.push({name: nombreRuta});
+			if(nombreRuta != this.$route.name){
+				this.$router.push({name: nombreRuta});
+			}
 		},
 		cerrarSesion(){
 			this.$emit("mostrar-modal",true);
 			axios.post(urlAPI + "/usuario/cerrarSesion",{
 				usuarioId: localStorage.getItem('usuarioId'),
-				apiToken: localStorage.getItem('apiToken')
+				api_Token: localStorage.getItem('apiToken')
 			})
 			.then(respuesta => {
 				let datosRespuesta = respuesta.data;
 				this.$emit('mostrar-modal',false);
 				localStorage.clear();
-				this.$router.push({name:'ruta-raiz'});
+				this.irA('ruta-raiz');
 			})
 			.catch(e => {
 				let errorMensaje = "";
@@ -123,10 +125,10 @@ Vue.component('plantilla-principal',{
 				}
 				this.$emit('mostrar-modal',false);
 				console.log(e);
+				localStorage.clear();
+				this.irA('ruta-raiz');
+				this.$emit("mostrar-modal",false);
 			});
-			localStorage.clear();
-			this.$router.push({name:'ruta-raiz'});
-			this.$emit("mostrar-modal",false);
 		}
 	}
 });

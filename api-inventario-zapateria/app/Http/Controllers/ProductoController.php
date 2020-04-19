@@ -118,12 +118,17 @@ class ProductoController extends Controller
 				])->first();
 			}
 
-			$rutaImagen = Utilitarias::guardarImagenBase64($req->imagenBase64, $req->referencia);
+			$rutaImagen = ($req->imagenBase64 == 'NO')?'':Utilitarias::guardarImagenBase64($req->imagenBase64, $req->referencia);
+
+
+
 			$producto->producto_referencia = $req->referencia;
 			$producto->producto_nombre = $req->nombre;
 			$producto->producto_descripcion = $req->descripcion;
 			$producto->producto_cantidad = $req->cantidad;
-			$producto->producto_imagen = $rutaImagen;
+			if($rutaImagen != ""){
+				$producto->producto_imagen = $rutaImagen;
+			}
 			$producto->producto_estado = $req->estado;
 			$producto->save();
 			$codigoRespuesta = 200;

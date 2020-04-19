@@ -68,7 +68,7 @@ class UsuarioController extends Controller
 		Utilitarias::escribirLog('Inicio intento de cierre de sesión');
 		$codigoRespuesta = '';
 		$jsonRespuesta = json_decode('{}');
-		if(empty($req->usuarioId) || empty($req->apiToken)){
+		if(empty($req->usuarioId) || empty($req->api_Token)){
 			//Parámetros incompletos
 			Utilitarias::escribirLog('Parámetros vacíos -> ' . $req->usuarioId);
 			$codigoRespuesta = 401;
@@ -81,7 +81,7 @@ class UsuarioController extends Controller
 			//Todos los parámetros tienen valor
 			$usuario = User::where([
 				['usuario_id',$req->usuarioId],
-				['api_token',$req->apiToken]
+				['api_token',$req->api_Token]
 			])->first();
 
 			if(empty($usuario)){
